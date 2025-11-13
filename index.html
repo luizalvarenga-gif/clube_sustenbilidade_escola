@@ -1,0 +1,1277 @@
+<!-- ===================================================== -->
+<!-- BLOCO 1/5 — Início do arquivo clube-sustentabilidade.html -->
+<!-- ===================================================== -->
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Clube de Sustentabilidade — Supermercado Escola</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#080808;
+      --panel:#0f0f0f;
+      --text:#f4f1ea;
+      --muted:#b8b3aa;
+      --gold:#c9a44a;
+      --gold-dark:#a07624;
+      --accent:#4cc17b;
+      --danger:#e0524d;
+      --glass:rgba(255,255,255,0.03);
+      --fade-fast:0.14s;
+      --fade-med:0.26s;
+      --card-radius:12px;
+      --max-width:1100px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:radial-gradient(circle at 10% 10%, #0b0b0b 0%, #050505 70%);overflow:hidden}
+    a{color:var(--gold);text-decoration:none}
+    .hidden{display:none!important}
+
+    /* Animations */
+    .fade-in{animation:fadeIn var(--fade-med) ease both}
+    .fade-out{animation:fadeOut var(--fade-med) ease both}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(6px)}}
+
+    /* Buttons */
+    .btn{border:none;border-radius:10px;padding:10px 14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:transform var(--fade-fast) ease,filter var(--fade-fast) ease}
+    .btn:hover{transform:translateY(-2px);filter:brightness(1.06)}
+    .btn-primary{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#111}
+    .btn-ghost{background:var(--glass);border:1px solid rgba(255,255,255,0.04);color:var(--text)}
+    .btn-danger{background:var(--danger);color:#fff}
+
+    input,select,textarea{width:100%;padding:10px;border-radius:8px;background:var(--glass);border:1px solid rgba(255,255,255,0.03);color:var(--text);transition:box-shadow var(--fade-fast) ease,border var(--fade-fast) ease}
+    input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 4px rgba(201,164,74,0.08)}
+
+    /* Layout */
+    .wrap{display:flex;height:100vh;overflow:hidden}
+    aside.sidebar{width:260px;background:linear-gradient(180deg,#000000 0%,#111111 100%);border-right:1px solid rgba(255,255,255,0.04);display:flex;flex-direction:column;justify-content:space-between;padding:22px;transition:all var(--fade-med)}
+    .logo{color:var(--gold);font-weight:700;font-size:1.35rem;letter-spacing:0.06em;margin-bottom:6px}
+    .brand-sub{color:var(--muted);font-size:.9rem;margin-bottom:18px}
+    nav ul{list-style:none;padding:0;margin:0}
+    nav li{margin-bottom:8px}
+    nav button{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border-radius:8px;background:transparent;border:none;color:var(--muted);cursor:pointer;text-align:left;transition:background var(--fade-fast),color var(--fade-fast)}
+    nav button:hover{background:rgba(255,255,255,0.03);color:var(--text)}
+    nav button.active{background:linear-gradient(90deg,rgba(201,164,74,0.12),rgba(76,193,123,0.02));color:var(--text)}
+
+    main{flex:1;padding:22px;overflow:auto;max-width:var(--max-width);margin:0 auto}
+    header.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+    .user-mini{display:flex;align-items:center;gap:12px}
+    .avatar{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));display:flex;align-items:center;justify-content:center;color:#111;font-weight:700}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:var(--card-radius);padding:16px;margin-bottom:14px;border:1px solid rgba(255,255,255,0.03);transition:transform var(--fade-fast) ease,box-shadow var(--fade-fast) ease}
+    .card:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,0.45)}
+    h1{margin:0;font-size:1.25rem}
+    .muted{color:var(--muted);font-size:.92rem}
+    .grid{display:grid;gap:14px}
+    .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+    .grid.cols-2{grid-template-columns:repeat(2,1fr)}
+
+    /* Login / Intro */
+    .center{display:grid;place-items:center;height:100vh;padding:18px}
+    .login-card{width:min(640px,96%);padding:28px;border-radius:14px;background:rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.04);box-shadow:0 6px 30px rgba(0,0,0,0.6)}
+    .login-title{font-size:1.6rem;color:var(--gold);margin-bottom:6px}
+    .small-muted{font-size:.92rem;color:var(--muted)}
+
+    /* Modals */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,0.62);display:flex;align-items:center;justify-content:center;z-index:1200;opacity:0;pointer-events:none;transition:opacity var(--fade-med) ease,visibility var(--fade-med) ease;backdrop-filter:blur(4px)}
+    .modal.show{opacity:1;pointer-events:auto}
+    .modal-card{width:min(640px,92%);background:var(--panel);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);transform:translateY(-8px)}
+    .modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:12px}
+
+    /* Tables */
+    table{width:100%;border-collapse:collapse;font-size:.92rem}
+    th,td{padding:10px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:left}
+    th{color:var(--muted);font-size:.78rem;text-transform:uppercase}
+    .status{padding:6px 8px;border-radius:999px;font-weight:700;font-size:.8rem}
+    .s-analyzing{background:rgba(76,193,123,0.12);color:var(--accent)}
+    .s-validated{background:rgba(201,164,74,0.12);color:var(--gold)}
+    .s-invalid{background:rgba(224,82,77,0.12);color:var(--danger)}
+
+    footer{margin-top:18px;color:var(--muted);font-size:.85rem}
+
+    /* responsiveness */
+    @media(max-width:920px){
+      aside.sidebar{display:none}
+      .wrap{flex-direction:column}
+      .grid.cols-3{grid-template-columns:1fr}
+      .grid.cols-2{grid-template-columns:1fr}
+      main{padding:12px}
+    }
+  </style>
+</head>
+<body>
+<!-- FIM BLOCO 1/5 -->
+<!-- ===================================================== -->
+<!-- BLOCO 2/5 — Intro, Login, Cadastro e Estrutura Principal -->
+<!-- ===================================================== -->
+
+<!-- ===== INTRO / APRESENTAÇÃO ===== -->
+<div id="view-intro" class="center">
+  <div class="login-card fade-in">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div>
+        <div class="login-title">Clube de Sustentabilidade</div>
+        <div class="small-muted">Supermercado Escola — Programa de Fidelidade Ambiental</div>
+      </div>
+      <div class="avatar">SE</div>
+    </div>
+
+    <p class="small-muted" style="margin-top:8px">
+      Participe do programa que une <strong>consciência ambiental</strong> e <strong>benefícios exclusivos</strong>!
+      Ao entregar materiais recicláveis no Supermercado Escola, você acumula pontos que podem ser trocados por produtos deliciosos da linha <em>“Delícias da Casa”</em>.
+    </p>
+
+    <div style="margin-top:18px;display:flex;gap:10px;justify-content:center">
+      <button class="btn btn-primary" id="btnParticipar"><i class="fa fa-leaf"></i> Participar do Programa</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LOGIN ===== -->
+<div id="view-login" class="center hidden">
+  <div class="login-card fade-in">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div>
+        <div class="login-title">Entrar no Clube</div>
+        <div class="small-muted">Acesse sua conta para registrar coletas e trocar pontos.</div>
+      </div>
+      <div class="avatar">SE</div>
+    </div>
+
+    <form id="loginForm">
+      <label>Email</label>
+      <input id="loginEmail" type="email" placeholder="seu@email.com" required>
+      <label style="margin-top:8px">Senha</label>
+      <input id="loginPass" type="password" placeholder="senha" required>
+
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:12px">
+        <i class="fa fa-sign-in-alt"></i> Entrar
+      </button>
+      <button type="button" id="btnOpenRegister" class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:8px">
+        <i class="fa fa-user-plus"></i> Criar Conta
+      </button>
+    </form>
+
+    <p class="small-muted" style="margin-top:10px;text-align:center">
+      <strong>Administrador:</strong> admin@escola.edu / admin<br>
+      <strong>Usuário:</strong> cliente@ufv.br
+    </p>
+  </div>
+</div>
+
+<!-- ===== CADASTRO ===== -->
+<div id="view-register" class="center hidden">
+  <div class="login-card fade-in">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div>
+        <div class="login-title">Cadastrar-se</div>
+        <div class="small-muted">Crie sua conta e comece a participar do clube.</div>
+      </div>
+      <div class="avatar">SE</div>
+    </div>
+
+    <form id="registerForm">
+      <label>Nome completo</label>
+      <input id="regName" required>
+      <label style="margin-top:8px">Email</label>
+      <input id="regEmail" type="email" required>
+      <label style="margin-top:8px">Senha</label>
+      <input id="regPass" type="password" required>
+
+      <div style="margin-top:12px;display:flex;gap:10px">
+        <button class="btn btn-primary" type="submit"><i class="fa fa-user-check"></i> Criar Conta</button>
+        <button class="btn btn-ghost" type="button" id="btnCancelRegister">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===== APLICAÇÃO PRINCIPAL ===== -->
+<div id="view-app" class="wrap hidden">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div>
+      <div class="logo">Supermercado Escola</div>
+      <div class="brand-sub">Clube de Sustentabilidade</div>
+      <nav>
+        <ul>
+          <li><button class="nav-btn active" data-target="dash"><i class="fa fa-home"></i> Painel</button></li>
+          <li><button class="nav-btn" data-target="registro"><i class="fa fa-recycle"></i> Registrar Coleta</button></li>
+          <li><button class="nav-btn" data-target="meus-registros"><i class="fa fa-list"></i> Meus Registros</button></li>
+          <li><button class="nav-btn" data-target="pontos"><i class="fa fa-gift"></i> Meus Pontos</button></li>
+          <li><button class="nav-btn" data-target="config"><i class="fa fa-user-cog"></i> Configurações</button></li>
+          <hr style="border:0;border-top:1px solid rgba(255,255,255,0.05);margin:10px 0">
+          <li class="admin-only"><button class="nav-btn" data-target="admin-validate"><i class="fa fa-check"></i> Validar Coletas</button></li>
+          <li class="admin-only"><button class="nav-btn" data-target="admin-records"><i class="fa fa-table"></i> Base de Registros</button></li>
+          <li class="admin-only"><button class="nav-btn" data-target="admin-dashboard"><i class="fa fa-chart-column"></i> Dashboard</button></li>
+          <li class="admin-only"><button class="nav-btn" data-target="admin-rules"><i class="fa fa-sliders"></i> Regras & Produtos</button></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div class="avatar" id="miniAvatar">U</div>
+        <div>
+          <div id="miniName" style="font-weight:700">Usuário</div>
+          <div class="small-muted" id="miniRole">Visitante</div>
+        </div>
+      </div>
+      <button id="btnLogoutSide" class="btn btn-ghost" style="width:100%"><i class="fa fa-sign-out-alt"></i> Sair</button>
+      <footer>Supermercado Escola © 2025</footer>
+    </div>
+  </aside>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main>
+    <header class="topbar">
+      <div>
+        <h1 id="pageTitle">Painel</h1>
+        <div class="small-muted" id="pageSubtitle">Bem-vindo ao Clube de Sustentabilidade</div>
+      </div>
+      <div class="user-mini">
+        <div style="text-align:right">
+          <div id="topUserName" style="font-weight:700">Visitante</div>
+          <div class="small-muted" id="topUserEmail">—</div>
+        </div>
+        <div class="avatar" id="topAvatar">SE</div>
+      </div>
+    </header>
+
+    <!-- PAINEL / DASHBOARD -->
+    <section id="dash" class="page card active">
+      <h2>Painel do Clube</h2>
+      <p class="small-muted">Acompanhe seus pontos, suas entregas e os últimos registros de sustentabilidade.</p>
+      <div class="grid cols-3" style="margin-top:12px">
+        <div class="card">
+          <div class="small-muted">Pontos Disponíveis</div>
+          <div id="balancePoints" style="font-size:1.8rem;font-weight:800;color:var(--gold);margin-top:6px">0</div>
+        </div>
+        <div class="card">
+          <div class="small-muted">Coletas em Análise</div>
+          <div id="countAnalyzing" style="font-size:1.8rem;font-weight:800;color:var(--accent);margin-top:6px">0</div>
+        </div>
+        <div class="card">
+          <div class="small-muted">Total de Registros</div>
+          <div id="countTotal" style="font-size:1.8rem;font-weight:800;color:var(--text);margin-top:6px">0</div>
+        </div>
+      </div>
+      <div class="grid cols-2" style="margin-top:14px">
+        <div class="card">
+          <h3>Últimos Registros</h3>
+          <table id="recentTable" style="margin-top:6px">
+            <thead><tr><th>Token</th><th>Material</th><th>Data</th><th>Status</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="card">
+          <h3>Resumo Gráfico</h3>
+          <div class="chart-box" id="smallChart" style="height:160px;text-align:center;line-height:160px;color:var(--muted)">
+            [gráfico ilustrativo]
+          </div>
+        </div>
+      </div>
+    </section>
+<!-- ===================================================== -->
+<!-- BLOCO 3/5 — Telas do Usuário (corrigido) -->
+<!-- ===================================================== -->
+
+<section id="registro" class="page card hidden">
+  <h2>Registrar Coleta</h2>
+  <p class="small-muted">
+    Escolha o tipo de material reciclável para gerar seu token de entrega.
+  </p>
+
+  <div class="grid cols-2" style="margin-top:12px">
+    <div class="card">
+      <label id="regMaterialLabel" for="regMaterial">Tipo de Material</label>
+      <select id="regMaterial"></select>
+
+      <div id="regControlsDiv" style="display:flex;gap:10px;margin-top:12px">
+        <button class="btn btn-primary" id="btnGenerateToken"><i class="fa fa-ticket"></i> Gerar Token</button>
+        <button class="btn btn-ghost" id="btnClearReg"><i class="fa fa-eraser"></i> Limpar</button>
+      </div>
+
+      <div id="tokenConfirmationArea" class="hidden" style="margin-top:16px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 12px;">
+        <h4 style="color: var(--gold)">Token Gerado!</h4>
+        <p class="small-muted">Anote o token abaixo e confirme o registro.</p>
+        <div id="tokenDisplayValue" style="font-family:monospace;background:rgba(255,255,255,0.04);padding:10px;border-radius:8px;color:var(--gold);margin-top:8px;font-size:1.2rem;text-align:center;">
+            SE-000000
+        </div>
+        <div style="display:flex;gap:10px;margin-top:12px">
+            <button class="btn btn-primary" id="btnConfirmRegisterToken"><i class="fa fa-check"></i> Registrar token</button>
+            <button class="btn btn-ghost" id="btnCancelRegisterToken"><i class="fa fa-eraser"></i> Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Como funciona</h3>
+      <ul class="small-muted" style="margin-top:6px;padding-left:20px">
+        <li>Selecione o tipo de material reciclável.</li>
+        <li>Ao clicar em <strong>Gerar Token</strong>, um código único será criado.</li>
+        <li>Anote e fixe o token na sacola antes de depositar no PEV do supermercado.</li>
+        <li>O status será atualizado após análise do administrador.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="meus-registros" class="page card hidden">
+  <h2>Meus Registros</h2>
+  <p class="small-muted">Acompanhe o status das coletas registradas.</p>
+
+  <div style="margin-top:12px;overflow:auto;max-height:420px">
+    <table id="myRecordsTable">
+      <thead>
+        <tr><th>Token</th><th>Material</th><th>Data</th><th>Status</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+<section id="pontos" class="page card hidden">
+  <h2>Meus Pontos & Resgates</h2>
+  
+  <div id="resgateSuccessMessage" class="card hidden" style="background:var(--accent); color:#fff; margin-bottom:14px;">
+    <h4 style="color:#fff;">Resgate Confirmado!</h4>
+    <p class="small-muted" style="color:rgba(255,255,255,0.8);">Basta ir ao caixa e informar seu CPF para retirar seu benefício. Seus pontos já foram atualizados.</p>
+  </div>
+  <div class="grid cols-2" style="margin-top:12px">
+    <div class="card">
+      <div class="small-muted">Saldo Atual</div>
+      <div id="pointsBalanceLarge" style="font-size:2rem;font-weight:800;color:var(--gold);margin-top:6px">0</div>
+      <p class="small-muted" style="margin-top:8px">
+        Acumule pontos ao entregar materiais recicláveis e troque por produtos exclusivos da padaria “Delícias da Casa”.
+      </p>
+    </div>
+    <div class="card">
+      <h3>Catálogo de Benefícios</h3>
+      <div class="products-list" id="catalogList" style="max-height:320px;overflow:auto;margin-top:8px">
+        </div>
+    </div>
+  </div>
+</section>
+
+<section id="config" class="page card hidden">
+  <h2>Configurações da Conta</h2>
+  <div class="grid cols-2" style="margin-top:12px">
+    <div class="card">
+      <label>Nome</label>
+      <input id="profileName">
+      <label style="margin-top:8px">Email</label>
+      <input id="profileEmail" disabled>
+      <label style="margin-top:8px">Telefone</label>
+      <input id="profilePhone">
+
+      <div style="display:flex;gap:10px;margin-top:12px">
+        <button class="btn btn-primary" id="btnSaveProfile"><i class="fa fa-save"></i> Salvar</button>
+        <button class="btn btn-ghost" id="btnChangePwd"><i class="fa fa-key"></i> Alterar Senha</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Informações</h3>
+      <p class="small-muted">Dúvidas? Fale com nossa equipe no Supermercado Escola.</p>
+      <p class="small-muted" style="margin-top:10px">Validação das coletas em até <strong>7 dias úteis</strong>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- BLOCO 4/5 — Telas do Administrador + Modais -->
+<!-- ===================================================== -->
+<section id="admin-validate" class="page card hidden">
+  <h2>Validação de Coletas</h2>
+  <p class="small-muted">Confirme e registre os materiais entregues pelos participantes.</p>
+
+  <div class="grid cols-2" style="margin-top:12px">
+    <div class="card">
+      <label>Token</label>
+      <input id="adminTokenInput" placeholder="SE-000000">
+      <label style="margin-top:8px">Peso (kg)</label>
+      <input id="adminWeight" placeholder="Ex: 2.5">
+      <label style="margin-top:8px">Tipo de Material</label>
+      <select id="adminMaterialClass"></select>
+      <label style="margin-top:8px">Conformidade</label>
+      <select id="adminConform">
+        <option value="conforme">Conforme</option>
+        <option value="rejeitado">Não Conforme</option>
+      </select>
+
+      <div style="display:flex;gap:10px;margin-top:12px">
+        <button class="btn btn-primary" id="btnAdminValidate"><i class="fa fa-check"></i> Validar</button>
+        <button class="btn btn-ghost" id="btnAdminFind"><i class="fa fa-search"></i> Buscar</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Orientações</h3>
+      <ul class="small-muted" style="margin-top:6px;padding-left:20px">
+        <li>Verifique se o token corresponde à coleta registrada.</li>
+        <li>Informe o peso e o tipo de material.</li>
+        <li>Selecione se está conforme ou inválido.</li>
+        <li>Valide para gerar pontos automaticamente ao usuário.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="admin-records" class="page card hidden">
+  <h2>Base de Registros</h2>
+  <p class="small-muted">Todos os registros de coleta e validação disponíveis para consulta.</p>
+
+  <div style="margin-top:12px;overflow:auto;max-height:420px">
+    <table id="recordsTable">
+      <thead>
+        <tr>
+          <th>Token</th><th>User ID</th><th>Material</th><th>Peso</th>
+          <th>Status</th><th>Depósito (Data/Hora)</th><th>Validação (Data/Hora)</th><th>Responsável</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+<section id="admin-dashboard" class="page card hidden">
+  <h2>Dashboard Administrativo</h2>
+  <p class="small-muted">Monitoramento do desempenho e engajamento do clube de sustentabilidade.</p>
+
+  <div class="grid cols-3" style="margin-top:12px">
+    <div class="card">
+      <div class="small-muted">Usuários Ativos</div>
+      <div id="adminUsersCount" style="font-size:1.8rem;font-weight:800;color:var(--gold)">0</div>
+    </div>
+    <div class="card">
+      <div class="small-muted">Total de Coletas</div>
+      <div id="adminTotalCollections" style="font-size:1.8rem;font-weight:800;color:var(--accent)">0</div>
+    </div>
+    <div class="card">
+      <div class="small-muted">Produtos Resgatados</div>
+      <div id="adminProductsRedeemed" style="font-size:1.8rem;font-weight:800;color:var(--text)">0</div>
+    </div>
+  </div>
+
+  <div class="grid cols-2" style="margin-top:14px">
+    <div class="card">
+      <h3>Materiais Coletados por Mês</h3>
+      <div id="chartMonthly" class="chart-box" style="height:180px; display:flex; align-items:flex-end; gap:10px; padding:10px; border-top: 1px solid var(--glass); margin-top: 10px;">
+          <div style="flex:1; text-align:center;">
+            <div style="height:60px; background:var(--gold); border-radius:4px;"></div>
+            <div class="small-muted" style="font-size:12px; margin-top:4px;">Aug</div>
+          </div>
+          <div style="flex:1; text-align:center;">
+            <div style="height:90px; background:var(--gold); border-radius:4px;"></div>
+            <div class="small-muted" style="font-size:12px; margin-top:4px;">Sep</div>
+          </div>
+          <div style="flex:1; text-align:center;">
+            <div style="height:140px; background:var(--gold); border-radius:4px;"></div>
+            <div class="small-muted" style="font-size:12px; margin-top:4px;">Oct</div>
+          </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Distribuição de Materiais</h3>
+       <div id="chartPie" class="chart-box" style="height:180px; display:flex; align-items:center; justify-content:center; gap: 20px; border-top: 1px solid var(--glass); margin-top: 10px;">
+          <div style="width:120px; height:120px; border-radius:50%; background: conic-gradient(var(--accent) 0% 48%, var(--gold) 48% 70%, #b8b3aa 70% 88%, var(--danger) 88% 100%);"></div>
+          <div classs="small-muted" style="font-size:13px; line-height:1.6;">
+              <div style="color:var(--accent)"><i class="fa fa-square"></i> Plástico — 48%</div>
+              <div style="color:var(--gold)"><i class="fa fa-square"></i> Papel — 22%</div>
+              <div style="color:#b8b3aa"><i class="fa fa-square"></i> Vidro — 18%</div>
+              <div style="color:var(--danger)"><i class="fa fa-square"></i> Metal — 12%</div>
+          </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="admin-rules" class="page card hidden">
+  <h2>Regras de Conversão & Catálogo de Produtos</h2>
+  <div class="grid cols-2" style="margin-top:12px">
+    <div class="card">
+      <h3>Regras de Materiais</h3>
+      <p class="small-muted">Gerencie os pontos atribuídos para cada tipo de material reciclável.</p>
+      <div id="rulesList" style="max-height:300px;overflow:auto;margin-top:6px"></div>
+      <button class="btn btn-primary" id="btnAddRule" style="margin-top:10px"><i class="fa fa-plus"></i> Adicionar Regra</button>
+    </div>
+
+    <div class="card">
+      <h3>Produtos do Clube</h3>
+      <p class="small-muted">Gerencie os produtos disponíveis para resgate e seus valores em pontos.</p>
+      <div id="productsList" style="max-height:300px;overflow:auto;margin-top:6px"></div>
+      <button class="btn btn-primary" id="btnAddProduct" style="margin-top:10px"><i class="fa fa-plus"></i> Cadastrar Produto</button>
+    </div>
+  </div>
+</section>
+
+<div id="modalResgate" class="modal" aria-hidden="true">
+  <div class="modal-card">
+    <h3>Confirmar Resgate</h3>
+    <p class="small-muted">Você está prestes a resgatar o item abaixo. Esta ação descontará os pontos da sua conta.</p>
+    
+    <label style="margin-top:10px">Produto</label>
+    <div id="resgateProductName" style="font-weight:700; font-size: 1.1rem;"></div>
+    
+    <label style="margin-top:6px">Custo</label>
+    <div id="resgateProductPoints" class="small-muted" style="color:var(--gold); font-weight:700;"></div>
+
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="btnCancelResgate">Cancelar</button>
+      <button class="btn btn-primary" id="btnConfirmResgate"><i class="fa fa-check"></i> Confirmar Resgate</button>
+    </div>
+  </div>
+</div>
+<div id="modalRuleEditor" class="modal" aria-hidden="true">
+  <div class="modal-card">
+    <h3 id="ruleEditorTitle">Nova Regra</h3>
+    <label>Tipo de Material</label>
+    <input id="ruleType">
+    <label style="margin-top:8px">Unidade</label>
+    <select id="ruleUnit">
+      <option value="kg">kg</option>
+      <option value="unidade">unidade</option>
+    </select>
+    <label style="margin-top:8px">Pontos por Unidade</label>
+    <input id="rulePoints" type="number">
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="btnCancelRule">Cancelar</button>
+      <button class="btn btn-primary" id="btnSaveRule">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modalProductEditor" class="modal" aria-hidden="true">
+  <div class="modal-card">
+    <h3 id="productEditorTitle">Novo Produto</h3>
+    <label>Nome</label>
+    <input id="productName">
+    <label style="margin-top:8px">Descrição</label>
+    <input id="productDesc">
+    <label style="margin-top:8px">Pontos Necessários</label>
+    <input id="productPoints" type="number">
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="btnCancelProduct">Cancelar</button>
+      <button class="btn btn-primary" id="btnSaveProduct">Salvar</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===================================================== -->
+<!-- BLOCO 5 -->
+<!-- ===================================================== -->
+
+<script>
+/* ---------- utilitários ---------- */
+const $ = (s,ctx=document)=>ctx.querySelector(s);
+const $$ = (s,ctx=document)=>Array.from((ctx||document).querySelectorAll(s));
+const uid = (p="SE") => `${p}-${Math.floor(100000 + Math.random()*900000)}`;
+const fmtDate = d => new Date(d).toLocaleDateString('pt-BR');
+const fmtDateTime = d => new Date(d).toLocaleString('pt-BR', {dateStyle:'short', timeStyle:'short'});
+
+/* ---------- dados simulados ---------- */
+let users = [
+  {id:1, name:"Admin Escola", email:"admin@escola.edu", role:"admin"},
+  {id:2, name:"Cliente Sustentável", email:"cliente@ufv.br", role:"user"},
+  {id:3, name:"João Silva", email:"joao@ufv.br", role:"user"},
+  {id:4, name:"Mariana Rosa", email:"mariana@ufv.br", role:"user"}
+];
+let session = null;
+
+let rules = [
+  {id:1, type:"Plástico", unit:"kg", pointsPer:10},
+  {id:2, type:"Papel / Papelão", unit:"kg", pointsPer:6},
+  {id:3, type:"Vidro", unit:"kg", pointsPer:8}
+];
+
+let products = [
+  {id:1, name:"Pão Delícias da Casa", desc:"Unidade do pão francês especial", points:50},
+  {id:2, name:"Café Expresso", desc:"Copo de 50ml", points:30},
+  {id:3, name:"Cookie Integral", desc:"Unidade", points:20}
+];
+
+let records = [
+  {id:1, token:"SE-100000", userId:3, material:"Plástico", status:"validated", created:new Date('2025-10-01T10:30:00').toISOString(), pointsAwarded:20, weight: 2, validatedAt: new Date('2025-10-02T14:00:00').toISOString(), validatedBy:"Admin Escola"},
+  {id:2, token:"SE-100001", userId:2, material:"Papel / Papelão", status:"validated", created:new Date('2025-09-15T11:00:00').toISOString(), pointsAwarded:30, weight: 5, validatedAt: new Date('2025-09-16T09:00:00').toISOString(), validatedBy:"Admin Escola"},
+  {id:3, token:"SE-100002", userId:4, material:"Vidro", status:"analyzing", created:new Date('2025-10-20T08:00:00').toISOString()},
+  {id:4, token:"SE-100003", userId:3, material:"Plástico", status:"rejeitado", created:new Date('2025-10-10T14:15:00').toISOString(), weight: 1, validatedAt: new Date('2025-10-11T10:00:00').toISOString(), validatedBy:"Admin Escola"},
+  {id:5, token:"SE-100004", userId:2, material:"Vidro", status:"analyzing", created:new Date('2025-10-22T11:20:00').toISOString()},
+  {id:6, token:"SE-100005", userId:2, material:"Plástico", status:"validated", created:new Date('2025-10-22T11:20:00').toISOString(), pointsAwarded: 100, weight: 10, validatedAt: new Date('2025-10-23T10:00:00').toISOString(), validatedBy:"Admin Escola"} // Pts para teste
+];
+
+// NOVO: Array para rastrear resgates
+let redemptions = [
+  // {id: 1, userId: 2, productId: 1, pointsSpent: 50, date: '...'}
+];
+
+// Variáveis globais para edição
+let currentEditingRuleId = null;
+let currentEditingProductId = null;
+let pendingRedemption = null;
+
+/* ========================================================== */
+/* INÍCIO: NOVAS FUNÇÕES HELPER */
+/* ========================================================== */
+
+/**
+ * Calcula o saldo de pontos ATUAL do usuário (Ganhos - Gastos)
+ */
+function getUserBalance(userId) {
+  if (!userId) return 0;
+  
+  // 1. Calcula Ganhos
+  const earned = records
+    .filter(r => r.userId === userId && r.status === 'validated')
+    .reduce((sum, r) => sum + (r.pointsAwarded || 0), 0);
+  
+  // 2. Calcula Gastos
+  const spent = redemptions
+    .filter(r => r.userId === userId)
+    .reduce((sum, r) => sum + (r.pointsSpent || 0), 0);
+  
+  return earned - spent;
+}
+
+/**
+ * Esconde a mensagem de sucesso de resgate
+ */
+function hideResgateSuccess() {
+    $('#resgateSuccessMessage')?.classList.add('hidden');
+}
+
+/* ========================================================== */
+/* FIM: NOVAS FUNÇÕES HELPER */
+/* ========================================================== */
+
+
+/* ---------- navegação básica (intro/login/register/app) ---------- */
+function showView(id){
+  ['view-intro','view-login','view-register','view-app'].forEach(v=>{
+    const el = document.getElementById(v);
+    if(el) el.classList.add('hidden');
+  });
+  const target = document.getElementById(id);
+  if(target) target.classList.remove('hidden');
+  
+  // Esconde a msg de sucesso ao trocar de view
+  hideResgateSuccess();
+}
+$('#btnParticipar')?.addEventListener('click', ()=> showView('view-login'));
+$('#btnOpenRegister')?.addEventListener('click', ()=> showView('view-register'));
+$('#btnCancelRegister')?.addEventListener('click', ()=> showView('view-login'));
+
+/* ---------- login / register ---------- */
+$('#loginForm')?.addEventListener('submit', e=>{
+  e.preventDefault();
+  const email = $('#loginEmail').value.trim().toLowerCase();
+  const pass = $('#loginPass').value.trim();
+  const user = users.find(u => u.email.toLowerCase() === email);
+  if(!user){ alert('Usuário não encontrado.'); return; }
+  if(user.role === 'admin' && pass !== 'admin'){ alert('Senha incorreta para admin.'); return; }
+  session = { id: user.id };
+  renderApp();
+  showView('view-app');
+});
+
+$('#registerForm')?.addEventListener('submit', e=>{
+  e.preventDefault();
+  const name = $('#regName').value.trim();
+  const email = $('#regEmail').value.trim().toLowerCase();
+  const pass = $('#regPass').value.trim();
+  if(!name || !email || !pass){ alert('Preencha todos os campos.'); return; }
+  if(users.some(u => u.email.toLowerCase() === email)){ alert('Email já cadastrado. Faça login.'); return; }
+  const id = (Math.max(0, ...users.map(u=>u.id)) || 0) + 1;
+  users.push({ id, name, email, role: 'user' });
+  session = { id };
+  alert('Cadastro realizado. Você já está logado.');
+  renderApp();
+  showView('view-app');
+});
+
+/* logout */
+$('#btnLogoutSide')?.addEventListener('click', ()=>{
+  session = null;
+  showView('view-intro');
+});
+
+/* ---------- renderApp: atualiza UI após login ---------- */
+function renderApp(){
+  if(!session) return;
+  const user = users.find(u => u.id === session.id);
+  if(!user) return;
+
+  // informações do topo / sidebar
+  $('#topUserName').textContent = user.name;
+  $('#topUserEmail').textContent = user.email;
+  $('#miniName').textContent = user.name;
+  $('#miniRole').textContent = user.role === 'admin' ? 'Administrador' : 'Usuário';
+  $('#miniAvatar').textContent = user.name.split(' ').map(s=>s[0]).slice(0,2).join('').toUpperCase();
+  $('#topAvatar').textContent = user.name.split(' ').map(s=>s[0]).slice(0,2).join('').toUpperCase();
+  
+  // Preenche info do perfil
+  $('#profileName').value = user.name;
+  $('#profileEmail').value = user.email;
+
+  // controle de visibilidade das abas (menu)
+  const isAdmin = user.role === 'admin';
+  $$('.nav-btn').forEach(btn=>{
+    const target = btn.dataset.target;
+    const userPages = ['dash','registro','meus-registros','pontos','config'];
+    const adminPages = ['admin-validate','admin-records','admin-dashboard','admin-rules'];
+    if(isAdmin){
+      if(userPages.includes(target)) btn.parentElement.style.display = 'none';
+      if(adminPages.includes(target)) btn.parentElement.style.display = '';
+    } else {
+      if(adminPages.includes(target)) btn.parentElement.style.display = 'none';
+      if(userPages.includes(target)) btn.parentElement.style.display = '';
+    }
+  });
+
+  // ativar a página inicial adequada
+  const first = isAdmin ? 'admin-dashboard' : 'dash';
+  $$('.nav-btn').forEach(b => b.classList.remove('active'));
+  $(`.nav-btn[data-target="${first}"]`)?.classList.add('active');
+  showPage(first);
+
+  // preenchimentos e renderizações
+  fillMaterialSelect();
+  renderMyRecords();
+  renderDashboard();
+  renderAdminRecords();
+  renderRules();
+  renderProducts();
+  renderAdminDashboard();
+}
+
+/* ---------- navegação lateral (pages) ---------- */
+$$('.nav-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    $$('.nav-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    showPage(btn.dataset.target);
+    
+    // Esconde a msg de sucesso ao trocar de aba
+    hideResgateSuccess();
+  });
+});
+function showPage(id){
+  $$('.page').forEach(p=>p.classList.add('hidden'));
+  const el = document.getElementById(id);
+  if(el) el.classList.remove('hidden');
+  const mapTitle = {
+    'dash':'Painel',
+    'registro':'Registrar Coleta',
+    'meus-registros':'Meus Registros',
+    'pontos':'Meus Pontos',
+    'config':'Configurações',
+    'admin-validate':'Validar Coletas',
+    'admin-records':'Base de Registros',
+    'admin-dashboard':'Dashboard Administrativo',
+    'admin-rules':'Regras & Produtos'
+  };
+  $('#pageTitle').textContent = mapTitle[id] || 'Clube';
+}
+
+/* ---------- preencher select de materiais ---------- */
+function fillMaterialSelect(){
+  const sel = $('#regMaterial');
+  if(!sel) return;
+  sel.innerHTML = '';
+  rules.forEach(r=>{
+    const o = document.createElement('option');
+    o.value = r.id;
+    o.textContent = `${r.type} (${r.pointsPer} pts/${r.unit})`;
+    sel.appendChild(o);
+  });
+
+  // admin select (validacao)
+  const selAdmin = $('#adminMaterialClass');
+  if(selAdmin){
+    selAdmin.innerHTML = '';
+    rules.forEach(r=>{
+      const o = document.createElement('option');
+      o.value = r.id;
+      o.textContent = r.type;
+      selAdmin.appendChild(o);
+    });
+  }
+}
+
+/* ========================================================== */
+/* FLUXO DE TOKEN (COM CONFIRMAÇÃO) - V3 (FINAL) */
+/* ========================================================== */
+let pendingToken = null; 
+
+const btnGenerate = $('#btnGenerateToken');
+const btnClearReg = $('#btnClearReg');
+const regMaterialSelect = $('#regMaterial');
+const regMaterialLabel = $('#regMaterialLabel');
+const regControlsDiv = $('#regControlsDiv');
+const tokenConfirmationArea = $('#tokenConfirmationArea');
+const tokenDisplayValue = $('#tokenDisplayValue');
+const btnConfirmRegister = $('#btnConfirmRegisterToken');
+const btnCancelRegister = $('#btnCancelRegisterToken');
+
+function resetRegistrationForm() {
+  pendingToken = null;
+  tokenConfirmationArea.classList.add('hidden');
+  tokenDisplayValue.textContent = '';
+  regMaterialSelect.classList.remove('hidden');
+  regMaterialLabel.classList.remove('hidden');
+  regControlsDiv.classList.remove('hidden');
+  regMaterialSelect.selectedIndex = 0;
+}
+
+if(btnGenerate) {
+  btnGenerate.addEventListener('click', () => {
+    if (!session) { alert('Faça login para gerar um token.'); return; }
+    const selectedId = Number(regMaterialSelect.value);
+    const rule = rules.find(r => r.id === selectedId);
+    if (!rule) { alert('Selecione um tipo de material válido.'); return; }
+    
+    const token = uid('SE');
+    pendingToken = {
+      id: Date.now(), token: token, material: rule.type,
+      userId: session.id, status: 'analyzing', created: new Date().toISOString()
+    };
+
+    tokenDisplayValue.textContent = token;
+    tokenConfirmationArea.classList.remove('hidden');
+    regMaterialSelect.classList.add('hidden');
+    regMaterialLabel.classList.add('hidden');
+    regControlsDiv.classList.add('hidden');
+  });
+}
+if(btnConfirmRegister) {
+  btnConfirmRegister.addEventListener('click', () => {
+    if (!pendingToken) { alert('Nenhum token pendente para registrar.'); return; }
+    records.push(pendingToken);
+    renderMyRecords();
+    renderDashboard();
+    renderAdminRecords();
+    alert('Token registrado com sucesso!');
+    resetRegistrationForm();
+  });
+}
+if(btnCancelRegister) { btnCancelRegister.addEventListener('click', resetRegistrationForm); }
+if(btnClearReg) { btnClearReg.addEventListener('click', resetRegistrationForm); }
+/* ========================================================== */
+/* FIM: FLUXO DE TOKEN (COM CONFIRMAÇÃO) */
+/* ========================================================== */
+
+
+/* fechar modais ao clicar fora / ESC */
+$$('.modal').forEach(m=>{
+  m.addEventListener('click', e=>{
+    if(e.target === m) m.classList.remove('show');
+  });
+});
+document.addEventListener('keydown', e=>{
+  if(e.key === 'Escape') $$('.modal.show').forEach(m=>m.classList.remove('show'));
+});
+
+/* ---------- renderizar "Meus Registros" (usuário) ---------- */
+function renderMyRecords(){
+  const tbody = $('#myRecordsTable tbody');
+  if(!tbody) return;
+  tbody.innerHTML = '';
+  if(!session) return;
+  const my = records.filter(r=>r.userId === session.id).slice().reverse();
+  my.forEach(r=>{
+    const statusClass = r.status === 'validated' ? 's-validated' : r.status === 'rejeitado' ? 's-invalid' : 's-analyzing';
+    const statusText = r.status;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td><code>${r.token}</code></td>
+                    <td>${r.material}</td>
+                    <td>${fmtDate(r.created)}</td>
+                    <td><span class="status ${statusClass}">${statusText}</span></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+/* ---------- dashboard do usuário (contadores) ---------- */
+function renderDashboard(){
+  if(!session) return;
+  const my = records.filter(r=>r.userId === session.id);
+  $('#countAnalyzing').textContent = my.filter(r=>r.status === 'analyzing').length;
+  $('#countTotal').textContent = my.length;
+  
+  // ATUALIZADO: Usa a nova função de balanço
+  const pts = getUserBalance(session.id);
+  
+  $('#balancePoints').textContent = pts;
+  $('#pointsBalanceLarge').textContent = pts;
+
+  const recentBody = $('#recentTable tbody');
+  if(recentBody){
+    recentBody.innerHTML = '';
+    records.filter(r=>r.userId === session.id).slice(-5).reverse().forEach(r=>{
+      const statusClass = r.status === 'validated' ? 's-validated' : r.status === 'rejeitado' ? 's-invalid' : 's-analyzing';
+      const statusText = r.status;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${r.token}</td><td>${r.material}</td><td>${fmtDate(r.created)}</td><td><span class="status ${statusClass}">${statusText}</span></td>`;
+      recentBody.appendChild(tr);
+    });
+  }
+}
+
+/* ---------- ADMIN: validar coletas & base de registros ---------- */
+$('#btnAdminFind')?.addEventListener('click', ()=>{
+  const token = ($('#adminTokenInput')?.value || '').trim();
+  if(!token){ alert('Informe o token para buscar.'); return; }
+  const rec = records.find(r=>r.token === token);
+  if(!rec){ alert('Token não encontrado.'); return; }
+  $('#adminWeight').value = rec.weight || '';
+  const rule = rules.find(r=>r.type === rec.material);
+  if(rule) $('#adminMaterialClass').value = rule.id;
+  $('#adminConform').value = rec.status === 'rejeitado' ? 'rejeitado' : 'conforme';
+});
+
+$('#btnAdminValidate')?.addEventListener('click', ()=>{
+  const token = ($('#adminTokenInput')?.value || '').trim();
+  if(!token){ alert('Informe o token.'); return; }
+  const rec = records.find(r=>r.token === token);
+  if(!rec){ alert('Registro não encontrado.'); return; }
+  const weight = Number($('#adminWeight')?.value) || rec.weight || 0;
+  const ruleId = Number($('#adminMaterialClass')?.value);
+  const rule = rules.find(r=>r.id === ruleId);
+  const conform = $('#adminConform')?.value; 
+  
+  rec.weight = weight;
+  rec.material = rule ? rule.type : rec.material;
+  rec.status = conform === 'conforme' ? 'validated' : 'rejeitado';
+  rec.pointsAwarded = rec.status === 'validated' ? Math.round((rec.weight || 0) * (rule ? rule.pointsPer : 0)) : 0;
+  rec.validatedAt = new Date().toISOString();
+  rec.validatedBy = users.find(u=>u.id === session.id)?.name || '—';
+  
+  // re-render
+  renderMyRecords();
+  renderAdminRecords();
+  renderDashboard();
+  renderAdminDashboard();
+  alert('Validação salva.');
+});
+
+/* renderizar tabela completa (admin) */
+function renderAdminRecords(){
+  const tbody = $('#recordsTable tbody');
+  if(!tbody) return;
+  tbody.innerHTML = '';
+  records.slice().reverse().forEach(r=>{
+    const u = users.find(usr => usr.id === r.userId);
+    const statusClass = r.status === 'validated' ? 's-validated' : r.status === 'rejeitado' ? 's-invalid' : 's-analyzing';
+    const statusText = r.status;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${r.token}</td>
+                    <td>${u?u.name:'—'}</td>
+                    <td>${r.material}</td>
+                    <td>${r.weight||'-'}</td>
+                    <td><span class="status ${statusClass}">${statusText}</span></td>
+                    <td>${fmtDateTime(r.created)}</td>
+                    <td>${r.validatedAt?fmtDateTime(r.validatedAt):'—'}</td>
+                    <td>${r.validatedBy||'—'}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+/* Renderizar Dashboard Admin com dados fixos */
+function renderAdminDashboard() {
+  $('#adminUsersCount').textContent = "3.368";
+  $('#adminTotalCollections').textContent = "16.000";
+  // ATUALIZADO: Conta resgates reais
+  $('#adminProductsRedeemed').textContent = redemptions.length;
+}
+
+/* ========================================================== */
+/* INÍCIO: ADMIN CRUD (REGRAS & PRODUTOS) */
+/* ========================================================== */
+
+/* ---------- Renderizar Regras (Admin) ---------- */
+function renderRules(){
+  const wrap = $('#rulesList'); if(!wrap) return;
+  wrap.innerHTML = '';
+  rules.forEach(r=>{
+    const div = document.createElement('div');
+    div.style.cssText = 'padding:8px; border-bottom:1px solid rgba(255,255,255,0.03); display:flex; justify-content:space-between; align-items:center;';
+    div.innerHTML = `<div>
+        <strong>${r.type}</strong>
+        <div class="small-muted">${r.pointsPer} pts/${r.unit}</div>
+      </div>
+      <div>
+        <button class="btn btn-ghost" data-edit-rule="${r.id}" style="padding: 6px 10px; font-size:12px;">Editar</button>
+        <button class="btn btn-danger" data-del-rule="${r.id}" style="padding: 6px 10px; font-size:12px;"><i class="fa fa-trash"></i></button>
+      </div>`;
+    wrap.appendChild(div);
+  });
+}
+
+/* ---------- Renderizar Produtos (Admin e Usuário) ---------- */
+function renderProducts() {
+  const adminList = $('#productsList');
+  const userCatalog = $('#catalogList');
+  
+  if(adminList) {
+    adminList.innerHTML = '';
+    products.forEach(p=>{
+      const div = document.createElement('div');
+      div.style.cssText = 'padding:8px; border-bottom:1px solid rgba(255,255,255,0.03); display:flex; justify-content:space-between; align-items:center;';
+      div.innerHTML = `<div>
+          <strong>${p.name}</strong>
+          <div class="small-muted" style="color:var(--gold)">${p.points} pontos</div>
+        </div>
+        <div>
+          <button class="btn btn-ghost" data-edit-prod="${p.id}" style="padding: 6px 10px; font-size:12px;">Editar</button>
+          <button class="btn btn-danger" data-del-prod="${p.id}" style="padding: 6px 10px; font-size:12px;"><i class="fa fa-trash"></i></button>
+        </div>`;
+      adminList.appendChild(div);
+    });
+  }
+  
+  if(userCatalog) {
+      userCatalog.innerHTML = '';
+      products.forEach(p => {
+          const div = document.createElement('div');
+          div.className = 'card';
+          div.style.marginBottom = '8px';
+          div.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                  <strong>${p.name}</strong>
+                  <div class="small-muted">${p.desc}</div>
+              </div>
+              <button class="btn btn-primary" data-resgate="${p.id}" data-points="${p.points}" data-name="${p.name}" style="padding: 6px 10px;">
+                  <i class="fa fa-gift"></i> ${p.points} pts
+              </button>
+          </div>`;
+          userCatalog.appendChild(div);
+      });
+  }
+}
+
+/* ---------- Handlers CRUD (Regras) ---------- */
+// Clicar em "Adicionar Regra"
+$('#btnAddRule')?.addEventListener('click', () => {
+    currentEditingRuleId = null; // Indica que é um item NOVO
+    $('#ruleEditorTitle').textContent = 'Nova Regra';
+    $('#ruleType').value = '';
+    $('#ruleUnit').value = 'kg';
+    $('#rulePoints').value = '';
+    $('#modalRuleEditor').classList.add('show');
+});
+
+// Clicar em "Salvar" no modal de Regra
+$('#btnSaveRule')?.addEventListener('click', () => {
+    const type = $('#ruleType').value.trim();
+    const unit = $('#ruleUnit').value;
+    const points = Number($('#rulePoints').value);
+    
+    if(!type || !points) { alert('Preencha todos os campos.'); return; }
+    
+    if (currentEditingRuleId) {
+        // Editando existente
+        const rule = rules.find(r => r.id === currentEditingRuleId);
+        if(rule) {
+            rule.type = type;
+            rule.unit = unit;
+            rule.pointsPer = points;
+        }
+    } else {
+        // Criando novo
+        const newId = (Math.max(0, ...rules.map(r => r.id)) || 0) + 1;
+        rules.push({ id: newId, type, unit, pointsPer: points });
+    }
+    
+    $('#modalRuleEditor').classList.remove('show');
+    renderRules();
+    fillMaterialSelect(); // Atualiza os <select>
+});
+
+// Clicar em "Cancelar" no modal de Regra
+$('#btnCancelRule')?.addEventListener('click', () => {
+    $('#modalRuleEditor').classList.remove('show');
+});
+
+/* ---------- Handlers CRUD (Produtos) ---------- */
+// Clicar em "Adicionar Produto"
+$('#btnAddProduct')?.addEventListener('click', () => {
+    currentEditingProductId = null; // Indica que é um item NOVO
+    $('#productEditorTitle').textContent = 'Novo Produto';
+    $('#productName').value = '';
+    $('#productDesc').value = '';
+    $('#productPoints').value = '';
+    $('#modalProductEditor').classList.add('show');
+});
+
+// Clicar em "Salvar" no modal de Produto
+$('#btnSaveProduct')?.addEventListener('click', () => {
+    const name = $('#productName').value.trim();
+    const desc = $('#productDesc').value.trim();
+    const points = Number($('#productPoints').value);
+    
+    if(!name || !points) { alert('Preencha nome e pontos.'); return; }
+    
+    if (currentEditingProductId) {
+        // Editando existente
+        const prod = products.find(p => p.id === currentEditingProductId);
+        if(prod) {
+            prod.name = name;
+            prod.desc = desc;
+            prod.points = points;
+        }
+    } else {
+        // Criando novo
+        const newId = (Math.max(0, ...products.map(p => p.id)) || 0) + 1;
+        products.push({ id: newId, name, desc, points });
+    }
+    
+    $('#modalProductEditor').classList.remove('show');
+    renderProducts();
+});
+
+// Clicar em "Cancelar" no modal de Produto
+$('#btnCancelProduct')?.addEventListener('click', () => {
+    $('#modalProductEditor').classList.remove('show');
+});
+
+
+/* ---------- Handlers de Eventos (Delegação para Editar/Excluir) ---------- */
+document.addEventListener('click', (e) => {
+    // ---- Regras ----
+    const editRuleBtn = e.target.closest('[data-edit-rule]');
+    if(editRuleBtn) {
+        const id = Number(editRuleBtn.dataset.editRule);
+        const rule = rules.find(r => r.id === id);
+        if(!rule) return;
+        
+        currentEditingRuleId = id; // Indica que estamos EDITANDO
+        $('#ruleEditorTitle').textContent = 'Editar Regra';
+        $('#ruleType').value = rule.type;
+        $('#ruleUnit').value = rule.unit;
+        $('#rulePoints').value = rule.pointsPer;
+        $('#modalRuleEditor').classList.add('show');
+    }
+    
+    const delRuleBtn = e.target.closest('[data-del-rule]');
+    if(delRuleBtn) {
+        const id = Number(delRuleBtn.dataset.delRule);
+        if(confirm('Tem certeza que deseja excluir esta regra?')) {
+            rules = rules.filter(r => r.id !== id);
+            renderRules();
+            fillMaterialSelect();
+        }
+    }
+    
+    // ---- Produtos ----
+    const editProdBtn = e.target.closest('[data-edit-prod]');
+    if(editProdBtn) {
+        const id = Number(editProdBtn.dataset.editProd);
+        const prod = products.find(p => p.id === id);
+        if(!prod) return;
+        
+        currentEditingProductId = id; // Indica que estamos EDITANDO
+        $('#productEditorTitle').textContent = 'Editar Produto';
+        $('#productName').value = prod.name;
+        $('#productDesc').value = prod.desc;
+        $('#productPoints').value = prod.points;
+        $('#modalProductEditor').classList.add('show');
+    }
+    
+    const delProdBtn = e.target.closest('[data-del-prod]');
+    if(delProdBtn) {
+        const id = Number(delProdBtn.dataset.delProd);
+        if(confirm('Tem certeza que deseja excluir este produto?')) {
+            products = products.filter(p => p.id !== id);
+            renderProducts();
+        }
+    }
+});
+
+/* ========================================================== */
+/* FIM: ADMIN CRUD (REGRAS & PRODUTOS) */
+/* ========================================================== */
+
+
+/* ========================================================== */
+/* INÍCIO: LÓGICA DE RESGATE (USUÁRIO) */
+/* ========================================================== */
+document.addEventListener('click', (e) => {
+    const resgateBtn = e.target.closest('[data-resgate]');
+    if(!resgateBtn) return;
+    
+    // Esconde a msg de sucesso (caso esteja visível)
+    hideResgateSuccess();
+    
+    const productId = Number(resgateBtn.dataset.resgate);
+    const requiredPoints = Number(resgateBtn.dataset.points);
+    const productName = resgateBtn.dataset.name;
+    const currentBalance = getUserBalance(session.id);
+    
+    if (currentBalance < requiredPoints) {
+        alert('Pontos insuficientes! Continue reciclando para acumular mais.');
+        return;
+    }
+    
+    // Tem pontos. Abrir modal de confirmação
+    pendingRedemption = {
+        productId: productId,
+        pointsSpent: requiredPoints
+    };
+    
+    $('#resgateProductName').textContent = productName;
+    $('#resgateProductPoints').textContent = `${requiredPoints} pontos`;
+    $('#modalResgate').classList.add('show');
+});
+
+// Clicar em "Cancelar" no modal de resgate
+$('#btnCancelResgate')?.addEventListener('click', () => {
+    $('#modalResgate').classList.remove('show');
+    pendingRedemption = null;
+});
+
+// Clicar em "Confirmar" no modal de resgate
+$('#btnConfirmResgate')?.addEventListener('click', () => {
+    if(!session || !pendingRedemption) {
+        alert('Erro. Tente novamente.');
+        return;
+    }
+    
+    // 1. Criar o registro de resgate
+    const newRedemption = {
+        id: (Math.max(0, ...redemptions.map(r => r.id)) || 0) + 1,
+        userId: session.id,
+        productId: pendingRedemption.productId,
+        pointsSpent: pendingRedemption.pointsSpent,
+        date: new Date().toISOString()
+    };
+    redemptions.push(newRedemption);
+    
+    // 2. Limpar pendência e fechar modal
+    pendingRedemption = null;
+    $('#modalResgate').classList.remove('show');
+    
+    // 3. Mostrar mensagem de sucesso
+    $('#resgateSuccessMessage').classList.remove('hidden');
+    
+    // 4. Atualizar UIs (painel e pontos)
+    renderDashboard();
+    renderAdminDashboard(); // Atualiza o contador de resgates
+});
+
+/* ========================================================== */
+/* FIM: LÓGICA DE RESGATE (USUÁRIO) */
+/* ========================================================== */
+
+
+/* ---------- inicialização ---------- */
+showView('view-intro');
+fillMaterialSelect();
+renderRules();
+renderAdminRecords();
+renderProducts();
+renderAdminDashboard();
+</script>
+
+</body>
+</html>
