@@ -118,13 +118,21 @@
       <div class="avatar">SE</div>
     </div>
 
-    <p class="small-muted" style="margin-top:8px">
-      Participe do programa que une <strong>consciência ambiental</strong> e <strong>benefícios exclusivos</strong>!
-      Ao entregar materiais recicláveis no Supermercado Escola, você acumula pontos que podem ser trocados por produtos deliciosos da linha <em>“Delícias da Casa”</em>.
+    <h3 style="margin-top:12px; margin-bottom:10px;">Como Funciona o Clube?</h3>
+    <p class="small-muted" style="margin-bottom:15px;">
+      O Clube de Sustentabilidade transforma o seu lixo reciclável em pontos valiosos para trocar por produtos exclusivos. Siga estes passos simples:
     </p>
 
+    <ol class="small-muted" style="padding-left:20px; margin-bottom:15px; line-height:1.6;">
+      <li><strong>1. Aceda ao Clube:</strong> Registe-se ou faça login para começar a participar.</li>
+      <li><strong>2. Gere o Token:</strong> Na secção "Registrar Coleta", escolha o material e gere um código único (Token).</li>
+      <li><strong>3. Deposite o Material:</strong> Leve o material reciclável ao ponto de entrega (PEV) do Supermercado Escola e anexe o Token gerado.</li>
+      <li><strong>4. Validação:</strong> A nossa equipa irá pesar e validar o material. Acompanhe o status em "Meus Registros".</li>
+      <li><strong>5. Acumule e Troque:</strong> Após a validação, os pontos são creditados na sua conta. Use-os para resgatar produtos deliciosos no catálogo!</li>
+    </ol>
+
     <div style="margin-top:18px;display:flex;gap:10px;justify-content:center">
-      <button class="btn btn-primary" id="btnParticipar"><i class="fa fa-leaf"></i> Participar do Programa</button>
+      <button class="btn btn-primary" id="btnParticipar"><i class="fa fa-sign-in-alt"></i> Entrar / Participar</button>
     </div>
   </div>
 </div>
@@ -286,11 +294,12 @@
 
   <div class="grid cols-2" style="margin-top:12px">
     <div class="card">
-      <label id="regMaterialLabel" for="regMaterial">Tipo de Material</label>
-      <select id="regMaterial"></select>
+      <div id="regMaterialButtons" style="display:grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 12px;">
+        <!-- Botões de material serão injetados aqui pelo JavaScript -->
+      </div>
 
       <div id="regControlsDiv" style="display:flex;gap:10px;margin-top:12px">
-        <button class="btn btn-primary" id="btnGenerateToken"><i class="fa fa-ticket"></i> Gerar Token</button>
+        <button class="btn btn-primary" id="btnGenerateToken" disabled><i class="fa fa-ticket"></i> Gerar Token</button>
         <button class="btn btn-ghost" id="btnClearReg"><i class="fa fa-eraser"></i> Limpar</button>
       </div>
 
@@ -582,9 +591,12 @@ let users = [
 let session = null;
 
 let rules = [
-  {id:1, type:"Plástico", unit:"kg", pointsPer:10},
-  {id:2, type:"Papel / Papelão", unit:"kg", pointsPer:6},
-  {id:3, type:"Vidro", unit:"kg", pointsPer:8}
+  {id:1, type:"Alumínio", unit:"kg", pointsPer:60},
+  {id:2, type:"Plástico (PET)", unit:"kg", pointsPer:20},
+  {id:3, type:"Papel / Papelão", unit:"kg", pointsPer:8},
+  {id:4, type:"Vidro", unit:"kg", pointsPer:2},
+  {id:5, type:"Aço (latas)", unit:"kg", pointsPer:15},
+  {id:6, type:"Óleo usado", unit:"L", pointsPer:40}
 ];
 
 let products = [
@@ -737,7 +749,7 @@ function renderApp(){
   showPage(first);
 
   // preenchimentos e renderizações
-  fillMaterialSelect();
+  renderMaterialButtons();
   renderMyRecords();
   renderDashboard();
   renderAdminRecords();
@@ -776,18 +788,39 @@ function showPage(id){
 }
 
 /* ---------- preencher select de materiais ---------- */
-function fillMaterialSelect(){
-  const sel = $('#regMaterial');
-  if(!sel) return;
-  sel.innerHTML = '';
+/* ---------- renderizar botões de materiais ---------- */
+function renderMaterialButtons(){
+  if(!regMaterialButtons) return;
+  regMaterialButtons.innerHTML = '';
+  
   rules.forEach(r=>{
-    const o = document.createElement('option');
-    o.value = r.id;
-    o.textContent = `${r.type} (${r.pointsPer} pts/${r.unit})`;
-    sel.appendChild(o);
-  });
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-ghost material-btn';
+    btn.dataset.ruleId = r.id;
+    btn.innerHTML = `<strong>${r.type}</strong><br><span class="small-muted">${r.pointsPer} pts/${r.unit}</span>`;
+    
+    if (r.id === selectedRuleId) {
+        btn.classList.add('btn-primary');
+        btn.classList.remove('btn-ghost');
+    }
 
-  // admin select (validacao)
+    btn.addEventListener('click', () => {
+        $$('.material-btn').forEach(b => {
+            b.classList.remove('btn-primary');
+            b.classList.add('btn-ghost');
+        });
+        
+        btn.classList.add('btn-primary');
+        btn.classList.remove('btn-ghost');
+        selectedRuleId = r.id;
+        
+        $('#btnGenerateToken').disabled = false;
+    });
+    
+    regMaterialButtons.appendChild(btn);
+  });
+  
+  // admin select (validation) - Atualiza o select do admin
   const selAdmin = $('#adminMaterialClass');
   if(selAdmin){
     selAdmin.innerHTML = '';
@@ -807,8 +840,8 @@ let pendingToken = null;
 
 const btnGenerate = $('#btnGenerateToken');
 const btnClearReg = $('#btnClearReg');
-const regMaterialSelect = $('#regMaterial');
-const regMaterialLabel = $('#regMaterialLabel');
+let selectedRuleId = null; // ID da regra selecionada
+const regMaterialButtons = $('#regMaterialButtons');
 const regControlsDiv = $('#regControlsDiv');
 const tokenConfirmationArea = $('#tokenConfirmationArea');
 const tokenDisplayValue = $('#tokenDisplayValue');
@@ -819,18 +852,29 @@ function resetRegistrationForm() {
   pendingToken = null;
   tokenConfirmationArea.classList.add('hidden');
   tokenDisplayValue.textContent = '';
-  regMaterialSelect.classList.remove('hidden');
-  regMaterialLabel.classList.remove('hidden');
   regControlsDiv.classList.remove('hidden');
-  regMaterialSelect.selectedIndex = 0;
+  
+  // Novo: Reseta a seleção de material e desabilita o botão
+  selectedRuleId = null;
+  $('#btnGenerateToken').disabled = true;
+  
+  // Esconde a área de botões se estiver visível (para o caso de cancelar a geração)
+  regMaterialButtons.classList.remove('hidden'); 
+  
+  $$('.material-btn').forEach(b => {
+      b.classList.remove('btn-primary');
+      b.classList.add('btn-ghost');
+  });
+  renderMaterialButtons(); // Para garantir que os botões sejam renderizados
 }
 
 if(btnGenerate) {
   btnGenerate.addEventListener('click', () => {
     if (!session) { alert('Faça login para gerar um token.'); return; }
-    const selectedId = Number(regMaterialSelect.value);
-    const rule = rules.find(r => r.id === selectedId);
-    if (!rule) { alert('Selecione um tipo de material válido.'); return; }
+    if (!selectedRuleId) { alert('Selecione um tipo de material válido.'); return; }
+    
+    const rule = rules.find(r => r.id === selectedRuleId);
+    if (!rule) { alert('Erro ao encontrar a regra selecionada.'); return; }
     
     const token = uid('SE');
     pendingToken = {
@@ -840,8 +884,7 @@ if(btnGenerate) {
 
     tokenDisplayValue.textContent = token;
     tokenConfirmationArea.classList.remove('hidden');
-    regMaterialSelect.classList.add('hidden');
-    regMaterialLabel.classList.add('hidden');
+    regMaterialButtons.classList.add('hidden'); // Esconde os botões
     regControlsDiv.classList.add('hidden');
   });
 }
@@ -1266,7 +1309,7 @@ $('#btnConfirmResgate')?.addEventListener('click', () => {
 
 /* ---------- inicialização ---------- */
 showView('view-intro');
-fillMaterialSelect();
+renderMaterialButtons(); // Chamada inicial para renderizar os botões
 renderRules();
 renderAdminRecords();
 renderProducts();
